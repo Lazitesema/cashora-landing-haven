@@ -38,30 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Check active sessions and get user profile
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        getProfile(session.user.id);
-      }
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await getProfile(session.user.id);
-      } else {
-        setProfile(null);
-      }
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   async function getProfile(userId: string) {
     try {
       const { data, error } = await supabase
@@ -71,14 +47,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error) {
+        console.error("Error fetching profile:", error);
         throw error;
       }
 
       setProfile(data);
+      return data;
     } catch (error) {
       console.error("Error fetching profile:", error);
+      return null;
     }
   }
+
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          const profile = await getProfile(session.user.id);
+          if (profile?.status === "pending" || profile?.status === "rejected") {
+            await supabase.auth.signOut();
+            setUser(null);
+            setProfile(null);
+            navigate("/signin");
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        const profile = await getProfile(session.user.id);
+        if (profile?.status === "pending" || profile?.status === "rejected") {
+          await supabase.auth.signOut();
+          setUser(null);
+          setProfile(null);
+          navigate("/signin");
+          return;
+        }
+      } else {
+        setProfile(null);
+      }
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -89,29 +111,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
 
-      // Get user profile
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", data.user.id)
-        .single();
+      const profile = await getProfile(data.user.id);
 
-      if (profileError) throw profileError;
+      if (!profile) {
+        throw new Error("Profile not found");
+      }
 
-      if (profileData.status === "pending") {
+      if (profile.status === "pending") {
         await supabase.auth.signOut();
         throw new Error("Your account is pending approval");
       }
 
-      if (profileData.status === "rejected") {
+      if (profile.status === "rejected") {
         await supabase.auth.signOut();
         throw new Error("Your account has been rejected");
       }
 
-      setProfile(profileData);
-
       // Redirect based on role
-      if (profileData.role === "admin") {
+      if (profile.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/dashboard");
@@ -197,7 +214,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
