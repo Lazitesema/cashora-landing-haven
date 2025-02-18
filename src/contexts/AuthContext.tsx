@@ -10,24 +10,8 @@ import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-
-interface UserProfile {
-  id: string;
-  first_name: string;
-  last_name: string;
-  username: string;
-  role: "admin" | "user";
-  status: "pending" | "approved" | "rejected";
-}
-
-interface AuthContextType {
-  user: User | null;
-  profile: UserProfile | null;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (data: any) => Promise<void>;
-  signOut: () => Promise<void>;
-  loading: boolean;
-}
+import { AuthContextType, UserProfile } from "@/types/auth";
+import { getProfile } from "@/utils/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -38,35 +22,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  async function getProfile(userId: string) {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      if (error) {
-        console.error("Error fetching profile:", error);
-        throw error;
-      }
-
-      setProfile(data);
-      return data;
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-      return null;
-    }
-  }
-
   useEffect(() => {
     const initAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         setUser(session?.user ?? null);
         if (session?.user) {
-          const profile = await getProfile(session.user.id);
-          if (profile?.status === "pending" || profile?.status === "rejected") {
+          const userProfile = await getProfile(session.user.id);
+          setProfile(userProfile);
+          if (userProfile?.status === "pending" || userProfile?.status === "rejected") {
             await supabase.auth.signOut();
             setUser(null);
             setProfile(null);
@@ -85,8 +49,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        const profile = await getProfile(session.user.id);
-        if (profile?.status === "pending" || profile?.status === "rejected") {
+        const userProfile = await getProfile(session.user.id);
+        setProfile(userProfile);
+        if (userProfile?.status === "pending" || userProfile?.status === "rejected") {
           await supabase.auth.signOut();
           setUser(null);
           setProfile(null);
@@ -111,24 +76,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (error) throw error;
 
-      const profile = await getProfile(data.user.id);
+      const userProfile = await getProfile(data.user.id);
 
-      if (!profile) {
+      if (!userProfile) {
         throw new Error("Profile not found");
       }
 
-      if (profile.status === "pending") {
+      if (userProfile.status === "pending") {
         await supabase.auth.signOut();
         throw new Error("Your account is pending approval");
       }
 
-      if (profile.status === "rejected") {
+      if (userProfile.status === "rejected") {
         await supabase.auth.signOut();
         throw new Error("Your account has been rejected");
       }
 
       // Redirect based on role
-      if (profile.role === "admin") {
+      if (userProfile.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/dashboard");
