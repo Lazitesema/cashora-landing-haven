@@ -1,29 +1,38 @@
 
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
+import { AdminLayout } from "@/components/layouts/AdminLayout";
 
 const Admin = () => {
-  const { profile, signOut } = useAuth();
-
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <Button onClick={signOut} variant="outline">
-            Sign out
-          </Button>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            Welcome, Admin {profile?.first_name}!
-          </h2>
-          <p className="text-gray-600">
-            Here you can manage user approvals and other administrative tasks.
-          </p>
+    <AdminLayout>
+      <div className="grid gap-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium">Total Users</h3>
+            </div>
+            <div className="text-2xl font-bold">0</div>
+          </div>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium">Pending Requests</h3>
+            </div>
+            <div className="text-2xl font-bold">0</div>
+          </div>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium">Total Deposits</h3>
+            </div>
+            <div className="text-2xl font-bold">$0</div>
+          </div>
+          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <h3 className="text-sm font-medium">Total Withdrawals</h3>
+            </div>
+            <div className="text-2xl font-bold">$0</div>
+          </div>
         </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 };
 

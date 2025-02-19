@@ -35,10 +35,17 @@ const App = () => (
               }
             />
             <Route
-              path="/admin"
+              path="/admin/*"
               element={
                 <ProtectedRoute requireAdmin>
-                  <Admin />
+                  <Routes>
+                    <Route index element={<Admin />} />
+                    <Route path="users" element={<NotFound />} />
+                    <Route path="deposit-requests" element={<NotFound />} />
+                    <Route path="withdrawal-requests" element={<NotFound />} />
+                    <Route path="sending-requests" element={<NotFound />} />
+                    <Route path="banks" element={<NotFound />} />
+                  </Routes>
                 </ProtectedRoute>
               }
             />
