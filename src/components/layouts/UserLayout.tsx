@@ -12,7 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, DollarSign, Send } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +21,21 @@ const menuItems = [
     title: "Dashboard",
     icon: LayoutDashboard,
     href: "/dashboard",
+  },
+  {
+    title: "Deposit",
+    icon: DollarSign,
+    href: "/dashboard/deposit",
+  },
+  {
+    title: "Send",
+    icon: Send,
+    href: "/dashboard/send",
+  },
+  {
+    title: "Withdraw",
+    icon: DollarSign,
+    href: "/dashboard/withdraw",
   },
 ];
 

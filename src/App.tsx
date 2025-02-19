@@ -27,10 +27,15 @@ const App = () => (
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route
-              path="/dashboard"
+              path="/dashboard/*"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <Routes>
+                    <Route index element={<Dashboard />} />
+                    <Route path="deposit" element={<NotFound />} />
+                    <Route path="send" element={<NotFound />} />
+                    <Route path="withdraw" element={<NotFound />} />
+                  </Routes>
                 </ProtectedRoute>
               }
             />

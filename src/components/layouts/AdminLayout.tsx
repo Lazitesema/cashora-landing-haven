@@ -13,7 +13,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import {
-  Bank,
+  Building,
   DollarSign,
   LayoutDashboard,
   Send,
@@ -50,7 +50,7 @@ const menuItems = [
   },
   {
     title: "Banks",
-    icon: Bank,
+    icon: Building,
     href: "/admin/banks",
   },
 ];
