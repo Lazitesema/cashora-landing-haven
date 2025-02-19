@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import Users from "./pages/admin/Users";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,7 +46,7 @@ const App = () => (
                 <ProtectedRoute requireAdmin>
                   <Routes>
                     <Route index element={<Admin />} />
-                    <Route path="users" element={<NotFound />} />
+                    <Route path="users" element={<Users />} />
                     <Route path="deposit-requests" element={<NotFound />} />
                     <Route path="withdrawal-requests" element={<NotFound />} />
                     <Route path="sending-requests" element={<NotFound />} />
