@@ -24,7 +24,14 @@ const Users = () => {
 
       if (error) throw error;
 
-      return data as UserDetails[];
+      return (data || []).map((profile) => ({
+        ...profile,
+        balance: profile.balance || 0,
+        withdrawal_fee_type: profile.withdrawal_fee_type || "percentage",
+        withdrawal_fee_value: profile.withdrawal_fee_value || 0,
+        sending_fee_type: profile.sending_fee_type || "percentage",
+        sending_fee_value: profile.sending_fee_value || 0,
+      })) as UserDetails[];
     },
   });
 

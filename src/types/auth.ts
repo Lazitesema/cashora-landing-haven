@@ -8,6 +8,11 @@ export interface UserProfile {
   username: string;
   role: "admin" | "user";
   status: "pending" | "approved" | "rejected";
+  date_of_birth?: string;
+  place_of_birth?: string;
+  residence?: string;
+  nationality?: string;
+  id_card_url?: string;
 }
 
 export interface AuthContextType {
