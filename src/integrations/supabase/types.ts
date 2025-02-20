@@ -110,39 +110,6 @@ export type Database = {
           },
         ]
       }
-      users: {
-        Row: {
-          created_at: string
-          email: string
-          full_name: string | null
-          id: string
-          password: string
-          role: string
-          status: string
-          username: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          full_name?: string | null
-          id?: string
-          password: string
-          role?: string
-          status?: string
-          username: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          full_name?: string | null
-          id?: string
-          password?: string
-          role?: string
-          status?: string
-          username?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
       [_ in never]: never
