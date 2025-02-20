@@ -13,6 +13,8 @@ export interface UserProfile {
   residence?: string;
   nationality?: string;
   id_card_url?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AuthContextType {

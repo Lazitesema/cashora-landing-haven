@@ -9,6 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          balance: number
+          created_at: string
+          date_of_birth: string | null
+          first_name: string | null
+          id: string
+          id_card_url: string | null
+          last_name: string | null
+          nationality: string | null
+          place_of_birth: string | null
+          residence: string | null
+          role: string
+          sending_fee_type: string
+          sending_fee_value: number
+          status: string
+          updated_at: string
+          username: string
+          withdrawal_fee_type: string
+          withdrawal_fee_value: number
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          date_of_birth?: string | null
+          first_name?: string | null
+          id: string
+          id_card_url?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          place_of_birth?: string | null
+          residence?: string | null
+          role?: string
+          sending_fee_type?: string
+          sending_fee_value?: number
+          status?: string
+          updated_at?: string
+          username: string
+          withdrawal_fee_type?: string
+          withdrawal_fee_value?: number
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          date_of_birth?: string | null
+          first_name?: string | null
+          id?: string
+          id_card_url?: string | null
+          last_name?: string | null
+          nationality?: string | null
+          place_of_birth?: string | null
+          residence?: string | null
+          role?: string
+          sending_fee_type?: string
+          sending_fee_value?: number
+          status?: string
+          updated_at?: string
+          username?: string
+          withdrawal_fee_type?: string
+          withdrawal_fee_value?: number
+        }
+        Relationships: []
+      }
+      user_limits: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          limit_type: string
+          period: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          limit_type: string
+          period: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          limit_type?: string
+          period?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_limits_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string

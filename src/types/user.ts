@@ -18,6 +18,4 @@ export interface UserDetails extends UserProfile {
   sending_fee_type: "percentage" | "fixed";
   sending_fee_value: number;
   limits?: UserLimit[];
-  created_at: string;
-  updated_at: string;
 }
