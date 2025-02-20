@@ -9,50 +9,35 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      profiles: {
+      users: {
         Row: {
           created_at: string
-          date_of_birth: string | null
-          first_name: string
+          email: string
+          full_name: string | null
           id: string
-          id_card_url: string | null
-          last_name: string
-          nationality: string | null
-          place_of_birth: string | null
-          residence: string | null
-          role: Database["public"]["Enums"]["user_role"] | null
-          status: Database["public"]["Enums"]["user_status"] | null
-          updated_at: string
+          password: string
+          role: string
+          status: string
           username: string
         }
         Insert: {
           created_at?: string
-          date_of_birth?: string | null
-          first_name: string
-          id: string
-          id_card_url?: string | null
-          last_name: string
-          nationality?: string | null
-          place_of_birth?: string | null
-          residence?: string | null
-          role?: Database["public"]["Enums"]["user_role"] | null
-          status?: Database["public"]["Enums"]["user_status"] | null
-          updated_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          password: string
+          role?: string
+          status?: string
           username: string
         }
         Update: {
           created_at?: string
-          date_of_birth?: string | null
-          first_name?: string
+          email?: string
+          full_name?: string | null
           id?: string
-          id_card_url?: string | null
-          last_name?: string
-          nationality?: string | null
-          place_of_birth?: string | null
-          residence?: string | null
-          role?: Database["public"]["Enums"]["user_role"] | null
-          status?: Database["public"]["Enums"]["user_status"] | null
-          updated_at?: string
+          password?: string
+          role?: string
+          status?: string
           username?: string
         }
         Relationships: []
@@ -62,16 +47,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_admin: {
-        Args: {
-          user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      user_role: "admin" | "user"
-      user_status: "pending" | "approved" | "rejected"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
