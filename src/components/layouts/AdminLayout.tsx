@@ -18,6 +18,8 @@ import {
   LayoutDashboard,
   Send,
   Users,
+  ArrowDownToLine,
+  ArrowUpToLine,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -35,12 +37,12 @@ const menuItems = [
   },
   {
     title: "Deposit Requests",
-    icon: DollarSign,
+    icon: ArrowDownToLine,
     href: "/admin/deposit-requests",
   },
   {
     title: "Withdrawal Requests",
-    icon: DollarSign,
+    icon: ArrowUpToLine,
     href: "/admin/withdrawal-requests",
   },
   {
