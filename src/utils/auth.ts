@@ -6,7 +6,7 @@ export async function getProfile(userId: string): Promise<UserProfile | null> {
   try {
     const { data, error } = await supabase
       .from("profiles")
-      .select("*")
+      .select("*, limits:user_limits(*)")
       .eq("id", userId)
       .single();
 
@@ -21,7 +21,8 @@ export async function getProfile(userId: string): Promise<UserProfile | null> {
     const profile: UserProfile = {
       ...data,
       role: data.role as "admin" | "user",
-      status: data.status as "pending" | "approved" | "rejected"
+      status: data.status as "pending" | "approved" | "rejected",
+      limits: Array.isArray(data.limits) ? data.limits : []
     };
 
     return profile;
